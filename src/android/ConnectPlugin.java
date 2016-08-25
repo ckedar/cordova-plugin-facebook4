@@ -33,6 +33,8 @@ import com.facebook.share.widget.MessageDialog;
 import com.facebook.share.widget.ShareDialog;
 import com.facebook.share.widget.AppInviteDialog;
 
+import com.facebook.applinks.AppLinkData;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -331,6 +333,19 @@ public class ConnectPlugin extends CordovaPlugin {
         } else if (action.equals("appInvite")) {
             executeAppInvite(args, callbackContext);
 
+            return true;
+        } else if (action.equals("getDeferredApplink")) {
+            AppLinkData.fetchDeferredAppLinkData(cordova.getActivity().getApplicationContext(), new AppLinkData.CompletionHandler() {
+                @Override
+                public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                    if (appLinkData == null) {
+                        return;
+                    }
+                    final Uri targetUri = appLinkData.getTargetUri();
+                    Log.d(TAG, "returning deffered deep link " + targetUri.toString());
+                    callbackContext.success(targetUri.toString());
+                }
+            });
             return true;
         } else if (action.equals("activateApp")) {
             cordova.getThreadPool().execute(new Runnable() {
