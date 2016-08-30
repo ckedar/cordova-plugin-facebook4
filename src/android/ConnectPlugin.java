@@ -339,6 +339,7 @@ public class ConnectPlugin extends CordovaPlugin {
                 @Override
                 public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
                     if (appLinkData == null) {
+                        callbackContext.success("");
                         return;
                     }
                     final Uri targetUri = appLinkData.getTargetUri();
