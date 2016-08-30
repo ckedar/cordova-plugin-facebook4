@@ -487,9 +487,12 @@
         if (error) {
             NSLog(@"Received error while fetching deferred app link %@", error);
         }
+        NSString *urlString = @"";
         if (url) {
-            [[UIApplication sharedApplication] openURL:url];
+            urlString = url.absoluteString;
         }
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:urlString];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
 
